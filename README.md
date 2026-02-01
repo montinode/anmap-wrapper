@@ -1,56 +1,107 @@
-# ANmap Wrapper
-
-Nmap wrapper for Android
-
-This is not an official Nmap application. To know more about Nmap and its features visit the
-official homepage of the project: [https://nmap.org](https://nmap.org)
-
-## History
-
-In 2016 I applied for a GSoC at Nmap with a bid for an Android port of Nmap. I built an ugly
-prototype with a cross-compiled Nmap shared library, a C wrapper and a simple Android activity to
-interact with it. The bid was not successful, and probably for good reasons.
-
-In 2022, I thought it would still be nice to be able to run Nmap from time to time from my
-smartphone. I took the original prototype, polished it a bit and packaged it. It's still ugly, but
-it does its job. And maybe angry user feedback will motivate me to spend some time on it.
-
-## How to install it
-
-The application is available on
-[Google Play](https://play.google.com/store/apps/details?id=com.werebug.anmapwrapper).
-
-You can also install an APK from
-the [release page](https://github.com/ruvolof/anmap-wrapper/releases) here on GitHub.
-However, releases here on GitHub will generally lag behind those on Google Play.
-
-## How to contribute
-
-Contributions are welcome.
-
-### How to cross-compile Nmap
-
-Be aware that the script to compile Nmap is based on my development environment. You might need to
-fix some paths for it to be working on your system.
-
-```
-cd app/src/main/cpp
-./make_nmap.sh
-```
-
-The script will do the following:
-
-1) Download latest stable Nmap source and openssl source.
-2) Configure and compile openssl and Nmap for `armeabi-v7a` and `arm64-v8a`, `x86` and `x86_64`.
-3) Import Nmap resource files (like `nmap-services`) to Android assets directory.
-4) Import NSE scripts included with Nmap source to Android assets directory.
-
-### How to build the APK if you can't cross-compile Nmap
-
-1) Download an apk from the [release page](https://github.com/ruvolof/anmap-wrapper/releases).
-2) Extract the content of the APK.
-3) Copy the `lib` folder inside the apk to `app/src/main/cpp/libs`.
-4) Copy the `assets` folder inside the apk to `app/src/main/assets`.
-5) Build the APK.
-
-
+id: monti-droid-security-code
+name: MONTI-DROID Security Code
+type: code.cpp
+content: |-
+  #include <MontiEnergy.h>
+  #include <DataInterceptor.h>
+  #include <NetworkGuardian.h>
+  #include <ThermalRegulator.h>
+  
+  // Configuration Constants for MONTI-DROID
+  const char* FIRMWARE_VERSION = "JCM-BDE-CONTROLLER-V2";
+  const char* USER_ID = "JOHNCHARLESMONTI_021189MJ2611";
+  const float MAX_MONTI_UNITS = 1000.0;
+  
+  // Security Parameters
+  const bool SWAP_PREVENTION = true;
+  const bool DATA_INTERCEPTION = true;
+  const char* AUTHORIZED_NETWORK = "MONTIAI.COM";
+  
+  class MontiDroidSecurity {
+  private:
+    DataInterceptor interceptor;
+    NetworkGuardian guardian;
+    float currentEnergyLevel;
+    bool isUnauthorizedDetected;
+  
+  public:
+    MontiDroidSecurity() : currentEnergyLevel(0.0), isUnauthorizedDetected(false) {
+      interceptor.initialize();
+      guardian.setAuthorizedNetwork(AUTHORIZED_NETWORK);
+      Serial.println("MONTI-DROID Security System Initialized");
+    }
+  
+    void monitorNetworkTraffic() {
+      // Continuously monitor incoming and outgoing data packets
+      while (true) {
+        DataPacket packet = interceptor.capturePacket();
+        if (!guardian.isAuthorized(packet.source)) {
+          isUnauthorizedDetected = true;
+          logUnauthorizedAccess(packet);
+          blockPacket(packet);
+        }
+        delay(100); // Polling interval
+      }
+    }
+  
+    void preventSwaps() {
+      if (SWAP_PREVENTION) {
+        guardian.disableTokenSwaps();
+        Serial.println("Token Swaps Disabled: MONTI-DROID Swap Prevention Active");
+      }
+    }
+  
+    void logUnauthorizedAccess(DataPacket packet) {
+      Serial.print("ALERT: Unauthorized Data Detected from ");
+      Serial.print(packet.source);
+      Serial.print(" at ");
+      Serial.println(packet.timestamp);
+      // Log to secure file for JOHNCHARLESMONTI review
+      File logFile = SD.open("unauthorized_access.log", FILE_WRITE);
+      if (logFile) {
+        logFile.print("Source: ");
+        logFile.print(packet.source);
+        logFile.print(" | Data: ");
+        logFile.println(packet.payload);
+        logFile.close();
+      }
+    }
+  
+    void blockPacket(DataPacket packet) {
+      guardian.blockSource(packet.source);
+      Serial.println("Packet Blocked: Unauthorized Source Quarantined");
+      // Notify JOHNCHARLESMONTI of interception
+      sendAlertToUser(packet);
+    }
+  
+    void sendAlertToUser(DataPacket packet) {
+      // Simulate sending alert (e.g., via MONTIAI.COM network)
+      Serial.print("Sending Alert to ");
+      Serial.print(USER_ID);
+      Serial.println(": Unauthorized Data Intercepted");
+    }
+  
+    void updateEnergyLevel(float delta) {
+      currentEnergyLevel += delta;
+      if (currentEnergyLevel > MAX_MONTI_UNITS) {
+        currentEnergyLevel = MAX_MONTI_UNITS;
+      }
+      Serial.print("Current Monti Energy Units: ");
+      Serial.println(currentEnergyLevel);
+    }
+  };
+  
+  MontiDroidSecurity droid;
+  
+  void setup() {
+    Serial.begin(9600);
+    droid = MontiDroidSecurity();
+    droid.preventSwaps();
+    Serial.println("MONTI-DROID Setup Complete for JOHNCHARLESMONTI");
+  }
+  
+  void loop() {
+    droid.monitorNetworkTraffic();
+    droid.updateEnergyLevel(10.0); // Simulate energy gain
+    delay(5000); // Main loop delay
+  }

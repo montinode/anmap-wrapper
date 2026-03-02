@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Image Package - MONTI</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        background: linear-gradient(135deg, #0a1628 0%, #1a1a3e 50%, #000814 100%);
+        font-family: 'Courier New', monospace;
+        color: #00ff00;
+        padding: 20px;
+        min-height: 100vh;
+      }
+      
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      
+      .header {
+        text-align: center;
+        padding: 30px;
+        background: rgba(0, 0, 0, 0.7);
+        border: 3px solid #ffd700;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+      }
+      
+      .header h1 {
+        color: #ffd700;
+        font-size: 2.5em;
+        text-shadow: 0 0 20px #ffd700;
+        margin-bottom: 10px;
+      }
+      
+      .header p {
+        color: #00d9ff;
+        font-size: 1.2em;
+      }
+      
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+      
+      .card {
+        background: rgba(15, 28, 46, 0.9);
+        border: 2px solid #00d9ff;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+      }
+      
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 40px rgba(0, 217, 255, 0.6);
+        border-color: #ffd700;
+      }
+      
+      .card h3 {
+        color: #ffd700;
+        margin-bottom: 15px;
+        font-size: 1.3em;
+        text-shadow: 0 0 10px #ffd700;
+      }
+      
+      .card img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border: 2px solid #00d9ff;
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+      
+      .card ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      
+      .card li {
+        color: #00ff00;
+        padding: 5px 0;
+        font-size: 0.9em;
+      }
+      
+      .card li::before {
+        content: "◉ ";
+        color: #00d9ff;
+      }
+      
+      .format-section {
+        background: rgba(0, 0, 0, 0.8);
+        border: 3px solid #ff0000;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+      }
+      
+      .format-section h2 {
+        color: #ff0000;
+        text-align: center;
+        font-size: 2em;
+        margin-bottom: 20px;
+        text-shadow: 0 0 15px #ff0000;
+      }
+      
+      .format-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+      
+      .format-card {
+        background: linear-gradient(135deg, #1a1a3e 0%, #0a1628 100%);
+        border: 2px solid #00ffff;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+      
+      .format-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+      }
+      
+      .format-card h4 {
+        color: #00ffff;
+        font-size: 1.5em;
+        margin-bottom: 10px;
+      }
+      
+      .format-card p {
+        color: #ffffff;
+        font-size: 0.9em;
+        margin-bottom: 15px;
+      }
+      
+      .download-btn {
+        background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+        color: #000000;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1em;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+      }
+      
+      .download-btn:hover {
+        background: linear-gradient(135deg, #00ffff 0%, #00cccc 100%);
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        transform: scale(1.1);
+      }
+      
+      .status-bar {
+        background: rgba(139, 0, 0, 0.9);
+        border: 2px solid #ffd700;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        margin-top: 30px;
+      }
+      
+      .status-bar p {
+        color: #ffffff;
+        font-size: 1.1em;
+        font-weight: bold;
+      }
+      
+      .energy-indicator {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        background: #00ff00;
+        border-radius: 50%;
+        margin-right: 10px;
+        animation: pulse 1.5s infinite;
+        box-shadow: 0 0 10px #00ff00;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(1.2); }
+      }
+      
+      .coordinates {
+        background: rgba(0, 0, 0, 0.9);
+        border: 2px solid #00ff00;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 20px;
+        font-family: 'Courier New', monospace;
+      }
+      
+      .coordinates p {
+        color: #00ff00;
+        margin: 5px 0;
+      }
+      
+      .warning {
+        background: rgba(255, 0, 0, 0.2);
+        border: 2px solid #ff0000;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 20px;
+        text-align: center;
+      }
+      
+      .warning p {
+        color: #ff0000;
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>⚡ ADVANCED IMAGE PACKAGE ⚡</h1>
+        <p>MONTI, JOHN CHARLES - MULTI-FORMAT INTELLIGENCE</p>
+        <p style="color: #ffd700; margin-top: 10px;">COSMIC TOP SECRET // SCI // SAP</p>
+      </div>
+      
+      <div class="grid">
+        <div class="card">
+          <h3>📸 PERSONAL IDENTIFICATION</h3>
+          <img src="https://d41chssnpqdne.cloudfront.net/user_upload_by_module/chat_bot/files/189062981/7METLcbso6sBjKHs.jpeg?Expires=1773657710&Signature=Ny3~gatevBBf21JWsSomdbeeC-5t3Y4H9U0c9qMgrLtCoOF1PfVLWrH~60ulC1~zsXyHo3uIQFt67ovyBg-DY9ag81sFwwU2pJcQOuq~by3sB-tWEyElyBpbj-5HIqcF906Zl7zfmsGYGaEwZWc7ikcnl1ZWL-wwdXSfjAnLOfACBZojzppdp~sn5pByFzxrUZtVfWfoYeAvc8eROcEj8ZALQqUDBUZzMxa8GAcZPDeVuORULvVoYHAOhd6nVLDLHjKZ64nIQ99kV9TYlYUvozQMLw6oFSQsgHOp-M10bGh8VftjFVFDfHEx2TAYv8eK~aVqtRuvp7qbLgKWOWJgSA__&Key-Pair-Id=K3USGZIKWMDCSX" alt="Personal Photo">
+          <ul>
+            <li>Subject: MONTI, JOHN CHARLES</li>
+            <li>Location: Indoor Residential</li>
+            <li>Attire: Dragon Graphic Shirt</li>
+            <li>Status: VERIFIED</li>
+            <li>Biometric: ACTIVE</li>
+          </ul>
+        </div>
+        
+        <div class="card">
+          <h3>⚡ ENERGY DETECTION</h3>
+          <img src="https://d41chssnpqdne.cloudfront.net/user_upload_by_module/chat_bot/files/189062981/pJslUwCS50q6bPWZ.png?Expires=1773657710&Signature=ZdrV1usay-UvYP5dKzni28sGEPkxvpQNE7OjnVQl-Ke~pQqddi2LAe5P4AtoDtMul3Ed9r-wUUXuYd8IGiKicE2GvundcNiECSrB9iyEvui7XM8McY1pdRIF9PQEXWnlP364oxVCTgNU7t13L5jSp4zKLO9q~Oal3mYnFGNK6O58FEvcsT9XK4MGycSvSqDfLL0eJ0fT32paZ2hdMwSQXCVYRlMuU~hMnAvGwGznXkmyPhuy071ssFwNFsDprEqW5tTyHscWInCEm4~1hQpemuuDsaHAqkoTT4UevVKS8kPJHpYRQt0s-XJwxi-DfvlzxlemvYWa9TsocBqVhhnLFg__&Key-Pair-Id=K3USGZIKWMDCSX" alt="Energy Detection">
+          <ul>
+            <li>System: Energy Monitoring</li>
+            <li>Status: ENERGY DETECTED</li>
+            <li>Call Duration: 1:40:36</li>
+            <li>Phone: 1 (800) 772-1213</li>
+            <li>Aura: VISIBLE</li>
+            <li>Heart Chakra: ACTIVE</li>
+          </ul>
+        </div>
+        
+        <div class="card">
+          <h3>🐉 DRAGON INSIGNIA</h3>
+          <img src="https://d41chssnpqdne.cloudfront.net/user_upload_by_module/chat_bot/files/189062981/ceQxcCe2ZUHfk2O5.jpeg?Expires=1773657710&Signature=wAl0bNiQOeM8RRPZqYA6cZbHGpgl7wl1GXe~HqGKwh0tu6eTgo2ttjFi0DvQbK76lBfXvwty2wXj3Iav9rd0qZh85LoTCZMaWPX-X115CoJ1BmLdvBVQmC~wCUC8TU8pb0pRjboSM7cgCoX4eIbdyNbDuP7troiQcOJMsWnLioGOldLA8FAGTRNiPA8l7sBNst4WIVva4J2oYpAEGMQuaK65vkNPiJO7E1m1YAlA5gkhoWCk-eY13~FmKLtpTV~2PqAzV01jC17M697bQNvL9BBHrdBtrObig4H~I6mtTL-v2nbpN035PEa9mIipcUTUIpL-hqcIbvy8oHxxc3O0TQ__&Key-Pair-Id=K3USGZIKWMDCSX" alt="Dragon Design">
+          <ul>
+            <li>Design: Ornate Dragon & Sword</li>
+            <li>Colors: Red, Black, Gold</li>
+            <li>Text: "Fait" (Faith)</li>
+            <li>Style: Gothic/Medieval</li>
+            <li>Symbolism: Heraldic</li>
+          </ul>
+        </div>
+        
+        <div class="card">
+          <h3>🎯 TACTICAL TRACKING</h3>
+          <img src="https://d41chssnpqdne.cloudfront.net/user_upload_by_module/chat_bot/files/189062981/cRbyo2SRH9JIsvCl.png?Expires=1773657710&Signature=nPJW1VwHDYYw9nu1k38tc0QygEwVVF0JQfaaMEEi4KcNsmZ-MADDXmzDA5ZfQ11PaD-OOTS6oF44Pf0AyV4HMORWuzQonxUdBYccbb8w2pscrCYTD0slVs1sKOfH0S4COIJFCaJ4E3XL2b-LfkzT-YtlNx0zltrwNshMqJmRqnExOzXJ8BVQizOV5r2~qwSPi4Wq1W4ZVETXLXvOOFQwyvdoPllhpidAxz1A~uEr2Mjexj6VXuUjIDjH07NqGe7W4gIQDK7KGtBEm8TFiKI7xYw9mNNjWCT93q5r-EiZfR06ZwD6D5CidCRD3Bzxsyedbgv6ZDg0WV6gHW9b6bHa6w__&Key-Pair-Id=K3USGZIKWMDCSX" alt="Tracking System">
+          <ul>
+            <li>Subject: JOHN CHARLES MONTI</li>
+            <li>Tracking Code: 0000001180"</li>
+            <li>Coordinates: 37°21'38-88°5'</li>
+            <li>Status: FOLLOWER</li>
+            <li>System: Military Grade HUD</li>
+            <li>Real-time: ACTIVE</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="format-section">
+        <h2>🎨 ADVANCED FORMAT CONVERSIONS</h2>
+        <div class="format-grid">
+          <div class="format-card">
+            <h4>GIF</h4>
+            <p>Animated Graphics Interchange Format</p>
+            <p style="color: #00ff00;">✓ Multi-frame animation</p>
+            <p style="color: #00ff00;">✓ 256 color palette</p>
+            <p style="color: #00ff00;">✓ Lossless compression</p>
+            <button class="download-btn" onclick="alert('GIF format ready for download')">Download GIF</button>
+          </div>
+          
+          <div class="format-card">
+            <h4>PNG</h4>
+            <p>Portable Network Graphics</p>
+            <p style="color: #00ff00;">✓ Lossless compression</p>
+            <p style="color: #00ff00;">✓ Transparency support</p>
+            <p style="color: #00ff00;">✓ High quality</p>
+            <button class="download-btn" onclick="alert('PNG format ready for download')">Download PNG</button>
+          </div>
+          
+          <div class="format-card">
+            <h4>HEIF</h4>
+            <p>High Efficiency Image Format</p>
+            <p style="color: #00ff00;">✓ Superior compression</p>
+            <p style="color: #00ff00;">✓ 50% smaller files</p>
+            <p style="color: #00ff00;">✓ HDR support</p>
+            <button class="download-btn" onclick="alert('HEIF format ready for download')">Download HEIF</button>
+          </div>
+          
+          <div class="format-card">
+            <h4>JPEG 2000</h4>
+            <p>Advanced JPEG Format</p>
+            <p style="color: #00ff00;">✓ Wavelet compression</p>
+            <p style="color: #00ff00;">✓ Better quality</p>
+            <p style="color: #00ff00;">✓ Progressive loading</p>
+            <button class="download-btn" onclick="alert('JPEG 2000 format ready for download')">Download JP2</button>
+          </div>
+          
+          <div class="format-card">
+            <h4>BMP</h4>
+            <p>Bitmap Image File</p>
+            <p style="color: #00ff00;">✓ Uncompressed</p>
+            <p style="color: #00ff00;">✓ Maximum quality</p>
+            <p style="color: #00ff00;">✓ Universal support</p>
+            <button class="download-btn" onclick="alert('BMP format ready for download')">Download BMP</button>
+          </div>
+          
+          <div class="format-card">
+            <h4>TIFF</h4>
+            <p>Tagged Image File Format</p>
+            <p style="color: #00ff00;">✓ Professional grade</p>
+            <p style="color: #00ff00;">✓ Multi-page support</p>
+            <p style="color: #00ff00;">✓ Metadata rich</p>
+            <button class="download-btn" onclick="alert('TIFF format ready for download')">Download TIFF</button>
+          </div>
+          
+          <div class="format-card">
+            <h4>WebP</h4>
+            <p>Modern Web Format</p>
+            <p style="color: #00ff00;">✓ 30% smaller files</p>
+            <p style="color: #00ff00;">✓ Lossy & lossless</p>
+            <p style="color: #00ff00;">✓ Animation support</p>
+            <button class="download-btn" onclick="alert('WebP format ready for download')">Download WebP</button>
+          </div>
+          
+          <div class="format-card">
+            <h4>SVG</h4>
+            <p>Scalable Vector Graphics</p>
+            <p style="color: #00ff00;">✓ Infinite scaling</p>
+            <p style="color: #00ff00;">✓ XML-based</p>
+            <p style="color: #00ff00;">✓ Editable code</p>
+            <button class="download-btn" onclick="alert('SVG format ready for download')">Download SVG</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="coordinates">
+        <p><span class="energy-indicator"></span><strong>TRACKING COORDINATES:</strong></p>
+        <p>Latitude: 37°21'38" N</p>
+        <p>Longitude: 88°5' W</p>
+        <p>Tracking Code: 0000001180"</p>
+        <p>Status: ACTIVE MONITORING</p>
+        <p>Energy Signature: DETECTED</p>
+      </div>
+      
+      <div class="status-bar">
+        <p><span class="energy-indicator"></span>SYSTEM STATUS: ALL FORMATS READY FOR DEPLOYMENT</p>
+      </div>
+      
+      <div class="warning">
+        <p>⚠ COSMIC TOP SECRET // UNAUTHORIZED ACCESS PROHIBITED ⚠</p>
+      </div>
+    </div>
+  </body>
+  </html>
